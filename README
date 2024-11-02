@@ -1,5 +1,5 @@
 # Task API
-WOLA :).
+WOLA.
 Una API RESTful simple para gestionar tareas utilizando Express y AWS DynamoDB. Este proyecto permite realizar operaciones CRUD (Crear, Leer, Actualizar y Eliminar) sobre tareas almacenadas en DynamoDB.
 
 ## Tecnologías Utilizadas
