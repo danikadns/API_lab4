@@ -71,4 +71,35 @@ router.get("/:id", async (req, res) => {
   }
 });
 
+router.post("/create", async (req, res) => {
+  try {
+    const { task_id, title, description, Status } = req.body;
+
+    if (!task_id || !title || !Status) {
+      return res.status(400).json(
+        errorResponse("Los campos task_id, title y Status son obligatorios", 400)
+      );
+    }
+    
+    const created_at = new Date().toISOString();
+
+    const params = {
+      TableName: TABLE_NAME,
+      Item: {
+        task_id,
+        title,
+        description,
+        Status,
+        created_at,
+      },
+    };
+
+    await dynamoDb.put(params).promise();
+
+    res.status(201).json(successResponse("Tarea creada", params.Item, 201));
+  } catch (error) {
+    res.status(500).json(errorResponse("Error al crear la tarea", 500, error.message));
+  }
+});
+
 module.exports = router;
