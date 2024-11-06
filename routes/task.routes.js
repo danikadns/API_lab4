@@ -71,7 +71,6 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-
 const { v4: uuidv4 } = require("uuid");
 router.post("/create", async (req, res) => {
   try {
@@ -103,6 +102,40 @@ router.post("/create", async (req, res) => {
     res.status(201).json(successResponse("Tarea creada", params.Item, 201));
   } catch (error) {
     res.status(500).json(errorResponse("Error al crear la tarea", 500, error.message));
+  }
+});
+
+// Actualizar el estado de una tarea
+router.put("/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { status } = req.body;
+
+    // Validación de que el campo `status` esté presente
+    if (!status) {
+      return res.status(400).json(errorResponse("El campo 'status' es requerido", 400));
+    }
+
+    const params = {
+      TableName: TABLE_NAME,
+      Key: {
+        task_id: id,
+      },
+      UpdateExpression: "set #s = :status",
+      ExpressionAttributeNames: {
+        "#s": "status",
+      },
+      ExpressionAttributeValues: {
+        ":status": status,
+      },
+      ReturnValues: "UPDATED_NEW",
+    };
+
+    const result = await dynamoDb.update(params).promise();
+
+    res.status(200).json(successResponse("Estado de la tarea actualizado exitosamente", result.Attributes));
+  } catch (error) {
+    res.status(500).json(errorResponse("Error al actualizar el estado de la tarea", 500, error.message));
   }
 });
 
