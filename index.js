@@ -9,7 +9,7 @@ const app = express();
 const port = process.env.PORT || 3000;
 
 AWS.config.update({
-  region: process.env.AWS_REGION,
+  region: process.env.AWS_REGION || "us-east-1",
   accessKeyId: process.env.AWS_ACCESS_ID,
   secretAccessKey: process.env.AWS_ACCESS_KEY,
 });

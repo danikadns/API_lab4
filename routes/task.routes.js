@@ -74,13 +74,13 @@ router.get("/:id", async (req, res) => {
 const { v4: uuidv4 } = require("uuid");
 router.post("/create", async (req, res) => {
   try {
-    const { title, description, Status } = req.body;
+    const { title, description, status } = req.body;
 
-    if (!title || !Status) {
+    if (!title || !status) {
       return res.status(400).json(errorResponse("Los campos son obligatorios: title, Status", 400));
     }
 
-    const task_id = parseInt(uuidv4().replace(/-/g, '').substring(0, 12), 16);
+    const task_id = /* parseInt( */uuidv4()/* .replace(/-/g, '').substring(0, 12), 16); */
 
     //const task_id = Date.now() * 1000 + Math.floor(Math.random() * 1000);
     
@@ -92,7 +92,7 @@ router.post("/create", async (req, res) => {
         task_id,
         title,
         description,
-        Status,
+        status,
         created_at,
       },
     };
