@@ -71,4 +71,24 @@ router.get("/:id", async (req, res) => {
   }
 });
 
+// Eliminar una tarea
+router.delete("/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const params = {
+      TableName: TABLE_NAME,
+      Key: {
+        task_id: id, // Usa task_id como clave primaria para identificar el registro a eliminar
+      },
+    };
+
+    const data = await dynamoDb.delete(params).promise();
+
+    res.status(200).json(successResponse("Tarea eliminada exitosamente"));
+  } catch (error) {
+    res.status(500).json(errorResponse("Error al eliminar la tarea", 500, error.message));
+  }
+});
+
 module.exports = router;
